@@ -1,0 +1,35 @@
+{
+    "name": "magna/plugin-sdk",
+    "description": "The official SDK for building Magna CMS plugins — extension contracts, the plugin base class, and the manifest spec.",
+    "type": "library",
+    "keywords": ["magna", "magna-cms", "cms", "plugin", "sdk", "laravel"],
+    "license": "MIT",
+    "authors": [
+        { "name": "Magna Team" }
+    ],
+    "require": {
+        "php": "^8.3",
+        "composer/semver": "^3.4",
+        "illuminate/contracts": "^13.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magna\\Contracts\\": "src/Contracts/",
+            "Magna\\Plugins\\": "src/Plugins/",
+            "Magna\\Admin\\Nav\\": "src/Nav/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magna\\PluginSdk\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
