@@ -1,5 +1,5 @@
 {
-    "name": "magna/plugin-sdk",
+    "name": "magna-cms/plugin-sdk",
     "description": "The official SDK for building Magna CMS plugins — extension contracts, the plugin base class, and the manifest spec.",
     "type": "library",
     "keywords": ["magna", "magna-cms", "cms", "plugin", "sdk", "laravel"],

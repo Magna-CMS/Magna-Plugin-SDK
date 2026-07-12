@@ -9,7 +9,7 @@ so you can build a plugin in your own repository without depending on Magna's co
 ## Install
 
 ```bash
-composer require magna/plugin-sdk
+composer require magna-cms/plugin-sdk
 ```
 
 ## Quick start

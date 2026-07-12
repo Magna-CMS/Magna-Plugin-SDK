@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/magna/plugin-sdk/main/schema/magna.schema.json",
+    "$id": "https://raw.githubusercontent.com/Magna-CMS/Magna-Plugin-SDK/main/schema/magna.schema.json",
     "title": "Magna plugin manifest (magna.json)",
     "type": "object",
     "required": ["name", "displayName", "description", "version", "author", "license", "compat", "entry", "permissions"],
