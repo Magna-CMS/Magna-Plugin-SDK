@@ -18,11 +18,17 @@ final class NavItem
     ) {}
 
     /**
-     * A link to a Filament resource (Stage 10 wires this up).
+     * A link to a Filament resource. The item label defaults to the resource's
+     * class basename and the URL resolves to `{$resourceClass}::getUrl()`.
      */
     public static function resource(string $resourceClass): self
     {
-        return new self(label: class_basename($resourceClass), resourceClass: $resourceClass);
+        // Pure-PHP basename so the SDK stays dependency-free (illuminate/support,
+        // which provides class_basename(), is not a hard SDK dependency).
+        $pos = strrpos($resourceClass, '\\');
+        $label = $pos === false ? $resourceClass : substr($resourceClass, $pos + 1);
+
+        return new self(label: $label, resourceClass: $resourceClass);
     }
 
     /**

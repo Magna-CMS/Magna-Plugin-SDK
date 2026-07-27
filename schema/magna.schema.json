@@ -52,6 +52,22 @@
                 "tables": { "type": "array", "items": { "type": "string" } },
                 "contentTypes": { "type": "array", "items": { "type": "string" } }
             }
+        },
+        "requires": {
+            "type": "object",
+            "description": "Hard dependencies: other plugin names -> semver constraint. Each must be enabled and version-compatible before this plugin boots; dependencies boot first.",
+            "additionalProperties": {
+                "type": "string",
+                "description": "A semver constraint, e.g. \"^1.0\"."
+            }
+        },
+        "conflict": {
+            "type": "object",
+            "description": "Plugin names -> semver constraint this plugin is incompatible with. Enabling both is refused.",
+            "additionalProperties": {
+                "type": "string",
+                "description": "A semver constraint, e.g. \"<2.0\" or \"*\"."
+            }
         }
     }
 }

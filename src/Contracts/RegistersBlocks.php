@@ -4,18 +4,28 @@ declare(strict_types=1);
 
 namespace Magna\Contracts;
 
+use Magna\Blocks\BlockDefinition;
+
 /**
- * Plugin contract: contributes block definitions.
- * Semver-guaranteed from core 1.0. Fully wired in Stage 11.
+ * Plugin contract: contributes block definitions to the BlockRegistry.
+ * Semver-guaranteed from core 1.0.
  *
- * @todo Stage 11 — return typed BlockDefinition objects instead of paths.
+ * The plugin's blocks() method returns a list of BlockDefinition value objects,
+ * which are registered into the core BlockRegistry when the plugin is enabled.
+ *
+ * Boundary note: this is the one SDK contract that intentionally references a
+ * core type (Magna\Blocks\BlockDefinition). Block definitions are a rich,
+ * core-owned schema primitive with their own field/option graph, so they are
+ * not duplicated into the SDK. A block-providing plugin therefore compiles
+ * against magna/core (which it requires at runtime regardless). Every other
+ * SDK contract is expressed purely in SDK, Laravel-contract, or scalar types.
  */
 interface RegistersBlocks
 {
     /**
-     * Return absolute paths to directories that contain block.json definitions.
+     * Return the block definitions provided by this plugin.
      *
-     * @return list<string>
+     * @return list<BlockDefinition>
      */
-    public function blockPaths(): array;
+    public function blocks(): array;
 }

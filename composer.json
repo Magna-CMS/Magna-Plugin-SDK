@@ -4,6 +4,12 @@
     "type": "library",
     "keywords": ["magna", "magna-cms", "cms", "plugin", "sdk", "laravel"],
     "license": "MIT",
+    "homepage": "https://github.com/Magna-CMS/Magna-Plugin-SDK",
+    "support": {
+        "issues": "https://github.com/Magna-CMS/Magna-Plugin-SDK/issues",
+        "source": "https://github.com/Magna-CMS/Magna-Plugin-SDK",
+        "docs": "https://github.com/Magna-CMS/Magna-Plugin-SDK/tree/main/docs"
+    },
     "authors": [
         { "name": "Magna Team" }
     ],
@@ -13,6 +19,8 @@
         "illuminate/contracts": "^13.0"
     },
     "require-dev": {
+        "laravel/pint": "^1.18",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^11.5"
     },
     "autoload": {

@@ -16,6 +16,9 @@ final class Manifest
      * @param  list<string>  $permissions
      * @param  array<string, mixed>  $provides
      * @param  array<mixed, mixed>|null  $uninstall
+     * @param  string|null  $icon  Relative path to a square icon (svg/png/jpg/webp) within the plugin's own directory — same convention as a VS Code extension's package.json "icon" field. Optional: with none set, the admin UI falls back to a letter avatar.
+     * @param  array<string, string>  $requires  Hard dependencies: other plugin names → semver constraint. Every one must be installed, enabled and version-compatible before this plugin can boot; they boot first.
+     * @param  array<string, string>  $conflict  Plugin names → semver constraint this plugin is incompatible with. Enabling both is refused.
      */
     public function __construct(
         public readonly string $name,
@@ -30,6 +33,9 @@ final class Manifest
         public readonly array $provides,
         public readonly array $permissions,
         public readonly ?array $uninstall,
+        public readonly ?string $icon = null,
+        public readonly array $requires = [],
+        public readonly array $conflict = [],
     ) {}
 
     /**
@@ -49,6 +55,7 @@ final class Manifest
 
         $uninstall = isset($data['uninstall']) && is_array($data['uninstall']) ? $data['uninstall'] : null;
         $provides = isset($data['provides']) && is_array($data['provides']) ? $data['provides'] : [];
+        $icon = isset($data['icon']) && is_string($data['icon']) && $data['icon'] !== '' ? $data['icon'] : null;
 
         return new self(
             name: self::requireString($data, 'name'),
@@ -63,7 +70,34 @@ final class Manifest
             provides: $provides,
             permissions: $permissions,
             uninstall: $uninstall,
+            icon: $icon,
+            requires: self::stringMap($data, 'requires'),
+            conflict: self::stringMap($data, 'conflict'),
         );
+    }
+
+    /**
+     * Extract a map of string keys to string values (e.g. plugin name → semver
+     * constraint), dropping any entry whose key or value is not a string.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, string>
+     */
+    private static function stringMap(array $data, string $key): array
+    {
+        $raw = $data[$key] ?? null;
+        if (! is_array($raw)) {
+            return [];
+        }
+
+        $map = [];
+        foreach ($raw as $name => $constraint) {
+            if (is_string($name) && is_string($constraint)) {
+                $map[$name] = $constraint;
+            }
+        }
+
+        return $map;
     }
 
     public function isCompatibleWith(string $coreVersion): bool
@@ -88,6 +122,9 @@ final class Manifest
             'provides' => $this->provides,
             'permissions' => $this->permissions,
             'uninstall' => $this->uninstall,
+            'icon' => $this->icon,
+            'requires' => $this->requires,
+            'conflict' => $this->conflict,
         ];
     }
 

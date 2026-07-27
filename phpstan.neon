@@ -1,0 +1,10 @@
+parameters:
+    level: 9
+    paths:
+        - src
+    # The SDK is dependency-free (illuminate/contracts + composer/semver only).
+    # RegistersBlocks intentionally references the core value object
+    # Magna\Blocks\BlockDefinition (see README "Package boundary"); a stub lets
+    # standalone analysis resolve it without pulling core into the SDK.
+    scanFiles:
+        - .phpstan/core-stubs.php

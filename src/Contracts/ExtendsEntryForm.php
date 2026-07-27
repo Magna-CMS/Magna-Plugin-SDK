@@ -6,9 +6,12 @@ namespace Magna\Contracts;
 
 /**
  * Plugin contract: adds fields or tabs to a content type's admin entry form.
- * Semver-guaranteed from core 1.0. Wired to Filament in Stage 10.
+ * Semver-guaranteed from core 1.0.
  *
- * @todo Stage 10 — return typed Filament form components instead of array<mixed>.
+ * The return type is a plain array rather than a typed Filament component list
+ * on purpose: Filament is not an SDK dependency (the SDK stays dependency-free
+ * beyond illuminate/contracts + composer/semver). Core merges the returned
+ * Filament components into the entry form when it builds the panel.
  */
 interface ExtendsEntryForm
 {
