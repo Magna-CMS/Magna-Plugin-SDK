@@ -31,6 +31,10 @@ final class PublicApiStabilityTest extends TestCase
             'Magna\Contracts\ExtendsEntryForm' => ['entryFormExtensions'],
             'Magna\Contracts\DecoratesDeliveryResponse' => ['decorateDeliveryEntry'],
             'Magna\Contracts\HandlesPersonalData' => ['exportPersonalData', 'erasePersonalData'],
+            'Magna\Contracts\CaptchaProvider' => ['enabled', 'provider', 'siteKey', 'verify'],
+            'Magna\Contracts\LoginCheck' => ['surface', 'view', 'failMode', 'assert'],
+            'Magna\Contracts\RegistersLoginChecks' => ['loginChecks'],
+            'Magna\Contracts\RegistersCaptchaSurfaces' => ['captchaSurfaces'],
         ];
     }
 

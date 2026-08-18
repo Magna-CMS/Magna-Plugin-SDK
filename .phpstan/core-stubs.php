@@ -13,3 +13,40 @@ namespace Magna\Blocks;
  * @see \Magna\Contracts\RegistersBlocks
  */
 class BlockDefinition {}
+
+namespace Magna\Blocks\DataSources;
+
+/**
+ * @see \Magna\Contracts\RegistersDataSources
+ */
+interface DataSource {}
+
+namespace Magna\Blocks\Conditions;
+
+/**
+ * @see \Magna\Contracts\RegistersDisplayConditions
+ */
+interface DisplayCondition {}
+
+namespace Magna\Blocks\DynamicTags;
+
+/**
+ * @see \Magna\Contracts\RegistersDynamicTags
+ */
+interface DynamicTag {}
+
+namespace Magna\Frontend;
+
+/**
+ * @see \Magna\Contracts\ProvidesFrontendPages
+ */
+class FrontendPage {}
+
+namespace Illuminate\Http;
+
+/**
+ * Laravel's HTTP request, referenced by \Magna\Contracts\LoginCheck::assert().
+ * Provided at runtime by the host application; stubbed here for standalone
+ * static analysis of the otherwise dependency-free SDK.
+ */
+class Request {}

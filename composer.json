@@ -26,6 +26,7 @@
     "autoload": {
         "psr-4": {
             "Magna\\Contracts\\": "src/Contracts/",
+            "Magna\\Captcha\\": "src/Captcha/",
             "Magna\\Plugins\\": "src/Plugins/",
             "Magna\\Admin\\Nav\\": "src/Nav/"
         }
