@@ -13,6 +13,7 @@ contract is always valid — capabilities are opt-in and additive.
 | `RegistersBlocks` | `blocks()` | Block definitions |
 | `RegistersWebhookEvents` | `webhookEvents()` | Custom webhook event keys |
 | `RegistersCommands` | `commands()` | Artisan console commands |
+| `RegistersMediaSources` | `mediaSources()` | Files the plugin stores outside the media library |
 | `ExtendsEntryForm` | `entryFormExtensions()` | Extra fields on a content-type form |
 | `DecoratesDeliveryResponse` | `decorateDeliveryEntry()` | Inject data into delivery API entries |
 | `HandlesPersonalData` | `exportPersonalData()`, `erasePersonalData()` | GDPR export/erase hooks |
@@ -56,6 +57,56 @@ public function adminNavigation(): NavGroup
     ]);
 }
 ```
+
+## Files your plugin stores itself
+
+The media library is presented to operators as the one screen that accounts for
+every file an installation holds. If your plugin writes uploads anywhere other
+than through core's `MediaIngestor`, say so — otherwise the library reports a
+number that is quietly wrong, and nobody can tell.
+
+Two acceptable homes for an upload:
+
+1. **The library**, through `Magna\Media\MediaIngestor`. The file appears on
+   `/media` like any other. Right for anything an operator would reuse.
+2. **Your own disk**, plus `RegistersMediaSources`. Right for files the library
+   must never serve — identity documents, contracts, private attachments.
+
+Declaring a source is not exposing it:
+
+```php
+final class ContractsMediaSource implements MediaSource
+{
+    public function key(): string { return 'crm.contracts'; }   // prefix with your plugin
+    public function label(): string { return 'Signed contracts'; }
+    public function permission(): ?string { return 'crm.contracts.view'; }
+    public function isConfidential(): bool { return true; }
+    public function count(): int { return Contract::query()->count(); }
+
+    /** @return list<MediaSourceItem> */
+    public function items(int $page, int $perPage, string $search = ''): array
+    {
+        return Contract::query()->latest()->forPage($page, $perPage)->get()
+            ->map(fn (Contract $c): MediaSourceItem => new MediaSourceItem(
+                id: $c->id,
+                name: $c->file_name,
+                mimeType: $c->mime_type,
+                sizeBytes: $c->size_bytes,
+                uploadedAt: $c->created_at,
+                ownerLabel: $c->customer_name,
+                manageUrl: ContractResource::getUrl('index'),
+            ))
+            ->all();
+    }
+}
+```
+
+A confidential source renders with no thumbnail, no preview and no storage URL;
+the operator follows `manageUrl` into your plugin, where your authorisation runs
+and your access log records the read. Never set `thumbnailUrl` on one — a
+thumbnail is the file. And `permission()` should not be null for a confidential
+source: file names alone (`passport-scan.jpg`) disclose things their owner did
+not agree to share.
 
 ## Optional integrations
 
