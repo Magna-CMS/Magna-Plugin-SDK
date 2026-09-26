@@ -145,7 +145,7 @@ Capabilities are opt-in and additive — not implementing one is always valid.
 
 ## Plugin lifecycle
 
-`Plugin` exposes four hooks, all safe no-ops by default; override only what you
+`Plugin` exposes five hooks, all safe no-ops by default; override only what you
 need:
 
 | Hook | When |
@@ -154,6 +154,7 @@ need:
 | `boot()` | routes, views, listeners, config merges |
 | `enable()` | one-time, on admin enable |
 | `disable()` | one-time, on admin disable (never destroy data) |
+| `upgrade($from, $to)` | once per core update, under the new core, after your migrations (SDK 1.6, core 1.4.4) |
 
 Enabled plugins boot in dependency order; a plugin whose files vanish or whose
 boot throws is auto-disabled with a logged error rather than crashing the CMS.

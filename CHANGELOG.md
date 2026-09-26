@@ -4,6 +4,22 @@ All notable changes to the Magna Plugin SDK are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This package follows [Semantic Versioning](https://semver.org).
 
+## [1.6.0] — 2026-09-26
+
+### Added
+
+- `Plugin::upgrade(string $from, string $to)` — the core tells every enabled
+  plugin when it has just been updated. Called once per core update, under
+  the new release, after the plugin's own migrations have run; a safe no-op
+  by default. Both versions are clean `x.y.z` strings, and a repair
+  re-applies the running release, so `$from` and `$to` are then equal.
+
+  Until now a plugin found out about a core update the hard way: something it
+  cached against the old core stopped matching, and nothing had told it. The
+  hook is where a cached schema, a settings shape or a compatibility shim that
+  can now go gets reconciled. Throwing is reported and does not stop the other
+  plugins being told. Core 1.4.4 calls it; an older core simply never does.
+
 ## [1.5.0] — 2026-08-19
 
 ### Added

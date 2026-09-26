@@ -44,6 +44,19 @@ abstract class Plugin
 
     public function disable(): void {}
 
+    /**
+     * The core has just been updated from $from to $to and the new release is
+     * live and migrated. Called once per update under the new core, after the
+     * plugin's own migrations have run, for every enabled plugin. Override it
+     * to reconcile anything that depends on the core version — a cached
+     * schema, a settings shape, a compatibility shim that can now go.
+     *
+     * Both versions are clean x.y.z strings. A repair re-applies the running
+     * release, so $from and $to are then equal. Throwing is reported and does
+     * not stop the other plugins being told.
+     */
+    public function upgrade(string $from, string $to): void {}
+
     public function getManifest(): Manifest
     {
         return $this->manifest;

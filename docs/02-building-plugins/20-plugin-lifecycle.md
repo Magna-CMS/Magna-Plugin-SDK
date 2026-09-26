@@ -11,9 +11,16 @@ hooks it needs. All hooks are safe no-ops by default.
 | `boot()` | after every enabled plugin has registered | routes, views, listeners, config merges |
 | `enable()` | one-time, when an admin enables the plugin | first-time setup beyond migrations |
 | `disable()` | one-time, when an admin disables the plugin | teardown of runtime state (never destroy data) |
+| `upgrade(string $from, string $to)` | once per core update, under the new core, after the plugin's own migrations | reconcile anything that depended on the old core version |
 
 Constructor injection gives you `$this->app` (the container), `$this->basePath`
 (the plugin root) and `$this->manifest`.
+
+`upgrade()` arrived with SDK 1.6 and is called by core 1.4.4 and newer. Both
+versions are clean `x.y.z` strings; a repair re-applies the running release,
+so `$from` and `$to` are then equal — keep the hook idempotent. Throwing is
+reported on the update's log and does not stop the other plugins being told.
+`Magna\Updater\Events\CoreUpdated` fires afterwards for listeners anywhere.
 
 ## Discovery
 
