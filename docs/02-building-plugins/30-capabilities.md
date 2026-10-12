@@ -14,6 +14,7 @@ contract is always valid — capabilities are opt-in and additive.
 | `RegistersWebhookEvents` | `webhookEvents()` | Custom webhook event keys |
 | `RegistersCommands` | `commands()` | Artisan console commands |
 | `RegistersMediaSources` | `mediaSources()` | Files the plugin stores outside the media library |
+| `RegistersSiteKitSections` | `siteKitSections()` | Plugin entities that travel in a site-kit bundle |
 | `ExtendsEntryForm` | `entryFormExtensions()` | Extra fields on a content-type form |
 | `DecoratesDeliveryResponse` | `decorateDeliveryEntry()` | Inject data into delivery API entries |
 | `HandlesPersonalData` | `exportPersonalData()`, `erasePersonalData()` | GDPR export/erase hooks |
@@ -107,6 +108,37 @@ and your access log records the read. Never set `thumbnailUrl` on one — a
 thumbnail is the file. And `permission()` should not be null for a confidential
 source: file names alone (`passport-scan.jpg`) disclose things their owner did
 not agree to share.
+
+## Entities that travel in a site kit
+
+`magna:site:export` / `diff` / `sync` promote a site between environments as
+one JSON bundle. Out of the box the bundle carries what Magna Pages owns —
+pages, templates, menus, patterns, settings. If your plugin owns entities a
+page references by handle (a form a form block selects, say), implement
+`RegistersSiteKitSections` or every kit using them applies cleanly and renders
+a hole the admin must hand-fill.
+
+```php
+final class FormsSection implements SiteKitSection
+{
+    public function key(): string { return 'forms:forms'; } // 'plugin:entity' — the colon is required
+
+    /** @return list<array<string, mixed>> */
+    public function export(): array { /* every row, deterministically ordered, keyed by handle */ }
+
+    /** @return array{added: list<string>, changed: list<string>, localOnly: list<string>} */
+    public function diff(array $rows): array { /* what apply would change */ }
+
+    public function apply(array $rows, ?string $actorId = null): int { /* upsert by handle, skip malformed rows */ }
+}
+```
+
+Rules the reader enforces: the key must contain a colon (that namespace is
+what keeps plugin sections clear of the kit's own keys), rows reference by
+handle/slug/name and never by id (ids are environment facts), and apply runs
+inside the kit's single transaction — skip a bad row, throw only when the
+whole section cannot apply. A kit section no local plugin registers is
+skipped and reported, never fatal.
 
 ## Optional integrations
 

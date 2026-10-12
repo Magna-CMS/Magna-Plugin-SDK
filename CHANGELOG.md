@@ -4,6 +4,25 @@ All notable changes to the Magna Plugin SDK are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This package follows [Semantic Versioning](https://semver.org).
 
+## [1.7.0] — 2026-10-12
+
+### Added
+
+- `RegistersSiteKitSections`, `SiteKitSection` — a plugin contributes its own
+  entities to a site-kit bundle, keyed by a namespaced section key
+  (`forms:forms`), so exporting, diffing, and promoting a site carries the
+  plugin's content too.
+
+  Until now the kit was a closed list of what Magna Pages itself owns: pages,
+  templates, menus, patterns, settings. A site whose contact page uses the
+  forms plugin's form block applied cleanly and rendered a hole, because the
+  form the block selects by handle did not travel — the kit's "one apply"
+  promise quietly became "one apply plus a README of manual steps". Sections
+  reference by handle/slug/name (never id — ids are environment facts), apply
+  as upserts inside the kit's one transaction, and a kit section no local
+  plugin registers is skipped and reported rather than fatal, so an older
+  installation can read a newer kit.
+
 ## [1.6.0] — 2026-09-26
 
 ### Added

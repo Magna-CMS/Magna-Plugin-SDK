@@ -35,6 +35,8 @@ final class PublicApiStabilityTest extends TestCase
             'Magna\Contracts\LoginCheck' => ['surface', 'view', 'failMode', 'assert'],
             'Magna\Contracts\RegistersLoginChecks' => ['loginChecks'],
             'Magna\Contracts\RegistersCaptchaSurfaces' => ['captchaSurfaces'],
+            'Magna\Contracts\RegistersSiteKitSections' => ['siteKitSections'],
+            'Magna\Contracts\SiteKitSection' => ['key', 'export', 'diff', 'apply'],
         ];
     }
 
