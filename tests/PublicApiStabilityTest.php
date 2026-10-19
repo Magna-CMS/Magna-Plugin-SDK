@@ -29,6 +29,7 @@ final class PublicApiStabilityTest extends TestCase
             'Magna\Contracts\RegistersWebhookEvents' => ['webhookEvents'],
             'Magna\Contracts\RegistersCommands' => ['commands'],
             'Magna\Contracts\ExtendsEntryForm' => ['entryFormExtensions'],
+            'Magna\Contracts\ExtendsEntryTable' => ['entryTableColumns', 'entryTableFilters'],
             'Magna\Contracts\DecoratesDeliveryResponse' => ['decorateDeliveryEntry'],
             'Magna\Contracts\HandlesPersonalData' => ['exportPersonalData', 'erasePersonalData'],
             'Magna\Contracts\CaptchaProvider' => ['enabled', 'provider', 'siteKey', 'verify'],

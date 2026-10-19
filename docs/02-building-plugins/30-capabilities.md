@@ -16,6 +16,7 @@ contract is always valid — capabilities are opt-in and additive.
 | `RegistersMediaSources` | `mediaSources()` | Files the plugin stores outside the media library |
 | `RegistersSiteKitSections` | `siteKitSections()` | Plugin entities that travel in a site-kit bundle |
 | `ExtendsEntryForm` | `entryFormExtensions()` | Extra fields on a content-type form |
+| `ExtendsEntryTable` | `entryTableColumns()`, `entryTableFilters()` | Extra columns and filters on a content-type's entry list |
 | `DecoratesDeliveryResponse` | `decorateDeliveryEntry()` | Inject data into delivery API entries |
 | `HandlesPersonalData` | `exportPersonalData()`, `erasePersonalData()` | GDPR export/erase hooks |
 

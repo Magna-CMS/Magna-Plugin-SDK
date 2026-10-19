@@ -4,6 +4,23 @@ All notable changes to the Magna Plugin SDK are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This package follows [Semantic Versioning](https://semver.org).
 
+## [1.8.0] — 2026-10-19
+
+### Added
+
+- `ExtendsEntryTable` — a plugin contributes columns and filters to a
+  content type's admin entry list (`entryTableColumns()`,
+  `entryTableFilters()`), the table-side sibling of `ExtendsEntryForm` and
+  shaped the same way: plain arrays, no Filament dependency in the SDK.
+
+  This contract existed once, only in an unversioned SDK source copy, and a
+  fresh checkout lost it — at which point every plugin class implementing it
+  (Magna SEO's entry-list traffic lights) became unloadable, and installing
+  such a plugin rolled itself back with "Interface not found". It is now in
+  version control, in the public-API stability test, and may not be removed
+  again short of a major. On a core that does not read the contract yet,
+  implementing it is inert.
+
 ## [1.7.0] — 2026-10-12
 
 ### Added
