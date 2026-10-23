@@ -1,13 +1,15 @@
 # Magna Plugin SDK
 
 <p>
-  <img src="https://img.shields.io/badge/version-v1.3.0--beta-orange?style=flat-square" alt="v1.3.0-beta">
+  <img src="https://img.shields.io/badge/version-v1.8.0-orange?style=flat-square" alt="v1.8.0">
   <img src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP 8.3+">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License">
 </p>
 
-The official SDK for building [Magna CMS](https://github.com/Magna-CMS/Magna)
-plugins. It is the **stable, versioned public API** a plugin compiles against —
+The official SDK for building plugins for
+[Magna CMS](https://github.com/Magna-CMS/Magna), the open-source, API-first
+headless CMS built on Laravel. It is the **stable, versioned public API** a
+plugin compiles against —
 the extension contracts, the `Plugin` base class, and the `magna.json` manifest
 spec — so you can build and test a plugin in your own repository without
 depending on Magna's core internals.
@@ -19,8 +21,9 @@ If you know Laravel, you already know most of what you need.
 - **Dependency-light** — requires only `illuminate/contracts` and
   `composer/semver`; installs and static-analyses standalone.
 - **Typed capability contracts** — opt into admin resources, navigation,
-  widgets, settings pages, blocks, webhook events, console commands, delivery
-  decoration and GDPR hooks by implementing an interface.
+  widgets, settings pages, blocks, webhook events, console commands, entry
+  form/table extensions, delivery decoration, GDPR hooks, login checks,
+  captcha surfaces, media sources and more by implementing an interface.
 - **A thin `Plugin` base class** with a simple lifecycle and boilerplate-free
   authoring helpers (`loadViewsFrom`, `loadRoutesFrom`, `mergeConfigFrom`,
   `listen`).
@@ -32,13 +35,21 @@ If you know Laravel, you already know most of what you need.
 ## Requirements
 
 - PHP 8.3 or newer
+- `illuminate/contracts` 13.x (Laravel 13) and `composer/semver` 3.4+ —
+  installed automatically by Composer
 - Magna CMS core at runtime (a plugin runs inside a Magna installation)
 
 ## Installation
 
+Add the SDK to your plugin's `composer.json`:
+
 ```bash
 composer require magna-cms/plugin-sdk
 ```
+
+Magna core already depends on the SDK, so a running Magna installation
+provides it; your plugin requires it so it can be built, analysed and tested
+on its own.
 
 ## Quick start
 
@@ -138,8 +149,23 @@ Implement any of these interfaces on your entry class:
 | `RegistersWebhookEvents` | `webhookEvents()` | Custom webhook event keys |
 | `RegistersCommands` | `commands()` | Artisan console commands |
 | `ExtendsEntryForm` | `entryFormExtensions()` | Extra fields on a content-type form |
+| `ExtendsEntryTable` | `entryTableColumns()`, `entryTableFilters()` | Extra columns and filters on a content type's entry list |
 | `DecoratesDeliveryResponse` | `decorateDeliveryEntry()` | Inject data into delivery API entries |
 | `HandlesPersonalData` | `exportPersonalData()`, `erasePersonalData()` | GDPR export/erase hooks |
+| `RegistersLoginChecks` | `loginChecks()` | Pre-authentication checks on the login flow |
+| `RegistersCaptchaSurfaces` | `captchaSurfaces()` | Forms/surfaces a captcha plugin can protect |
+| `RegistersMediaSources` | `mediaSources()` | Files the plugin stores outside the media library |
+| `ProvidesFrontendPages` | `frontendPages()` | Public site pages (mounted by Magna Pages) |
+| `RegistersDataSources` | `dataSources()` | Data the Pages Loop block can iterate |
+| `RegistersDynamicTags` | `dynamicTags()` | Live values page fields can bind to |
+| `RegistersDisplayConditions` | `displayConditions()` | Show/hide rules for page nodes |
+| `RegistersSiteKitSections` | `siteKitSections()` | Plugin entities carried in a site-kit export |
+
+`ProvidesFrontendPages`, `RegistersBlocks`, `RegistersDataSources`,
+`RegistersDynamicTags` and `RegistersDisplayConditions` reference definition
+types that live in Magna core, so a plugin using them compiles against core.
+The SDK also defines the `CaptchaProvider` contract that a captcha plugin binds
+in place of core's default no-op implementation.
 
 Capabilities are opt-in and additive — not implementing one is always valid.
 
@@ -219,8 +245,10 @@ not a public issue. See [SECURITY.md](SECURITY.md).
 ## Version compatibility
 
 Your plugin declares the core it supports with `compat.magna` in `magna.json`
-(e.g. `^1.0`). Magna refuses to enable a plugin whose constraint the running
-core doesn't satisfy. This SDK release targets **Magna CMS v1.3.0-beta**.
+(e.g. `^1.0`), and optionally the PHP it needs with `compat.php`. Magna refuses
+to enable a plugin whose constraints the running core or PHP version don't
+satisfy. Current Magna CMS 1.x releases require `magna-cms/plugin-sdk` `^1.7`;
+see [CHANGELOG.md](CHANGELOG.md) for which SDK version added each contract.
 
 ## API stability & Semantic Versioning
 
@@ -240,4 +268,4 @@ as the official Magna Docs site.
 
 ## License
 
-MIT © Magna CMS. See [LICENSE](LICENSE).
+Released under the [MIT License](LICENSE). © Magna.
